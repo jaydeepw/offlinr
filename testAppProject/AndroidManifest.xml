@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="io.trigger.forge.android.inspector"
+    android:installLocation="auto"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <uses-sdk
+        android:minSdkVersion="5"
+        android:targetSdkVersion="16" >
+    </uses-sdk>
+
+    <application
+        android:name="io.trigger.forge.android.core.ForgeApp"
+        android:icon="@drawable/icon"
+        android:label="ForgeInspector" >
+        <activity
+            android:name="io.trigger.forge.android.core.ForgeActivity"
+            android:configChanges="mcc|mnc|locale|touchscreen|keyboardHidden|navigation|orientation|screenLayout|uiMode|fontScale|screenSize"
+            android:launchMode="singleTask"
+            android:stateNotNeeded="true"
+            android:theme="@android:style/Theme.Black.NoTitleBar" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <provider
+            android:name="io.trigger.forge.android.core.ForgeContentProvider"
+            android:authorities="io.trigger.forge.android.inspector"
+            android:exported="true"
+            tools:ignore="ExportedContentProvider" />
+
+        <service android:name="nl.changer.messagequeue.QueueService" />
+
+        <receiver
+            android:name="nl.changer.messagequeue.NetWatcher"
+            android:label="NetworkConnection" >
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </receiver>
+    </application>
+
+</manifest>

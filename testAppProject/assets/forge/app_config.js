@@ -1,0 +1,1 @@
+window.forge = {}; window.forge.config = {"modules": {"inspector": {"version": "1.0"}, "messagequeue": {"version": "0.8", "config": {}}}}; window.forge.module_mapping = {"inspector": "inspector", "messagequeue": "messagequeue"};
