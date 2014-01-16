@@ -1,6 +1,5 @@
 package nl.changer.messagequeue;
 
-import io.trigger.forge.android.core.ForgeApp;
 
 import java.util.ArrayList;
 
@@ -28,13 +27,7 @@ public class QueueService extends IntentService {
 	protected void onHandleIntent( Intent intent ) {
 		Log.v( TAG, "#onHandleIntent Service has been started" );
 		
-		if( ForgeApp.getApp() == null)
-			Log.w( TAG, "#onHandleIntent getApp is null" );
-		
-		if( ForgeApp.getApp().getApplicationContext() == null)
-			Log.w( TAG, "#onHandleIntent getApplicationContext is null" );
-		
-		mQueueMgr = new QueueManager( ForgeApp.getApp().getApplicationContext() );
+		mQueueMgr = new QueueManager( QueueService.this );
 		ArrayList<Message> messages = mQueueMgr.getMessages();
 		
 		for (Message message : messages) {

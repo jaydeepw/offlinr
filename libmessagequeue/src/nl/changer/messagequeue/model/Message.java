@@ -1,6 +1,6 @@
 package nl.changer.messagequeue.model;
 
-import com.google.gson.JsonObject;
+import org.json.JSONObject;
 
 public class Message {
 	
@@ -11,7 +11,7 @@ public class Message {
 	/***
 	 * The actually message
 	 * ***/
-	public JsonObject mData;
+	public JSONObject mData;
 	
 	/***
 	 * MIME type of the message.
@@ -23,7 +23,7 @@ public class Message {
 	 * ***/
 	public String mURL;
 
-	public Message( long id, JsonObject data, String type, String url ) {
+	public Message( long id, JSONObject data, String type, String url ) {
 		mID = id;
 		mData = data;
 		mURL = url;

@@ -4,15 +4,16 @@ import java.util.ArrayList;
 
 import nl.changer.messagequeue.Constants;
 import nl.changer.messagequeue.model.Message;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.text.TextUtils;
 import android.util.Log;
-
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 public class QueueManager {
 
@@ -25,8 +26,7 @@ public class QueueManager {
 		mContext = ctx;
 	}
 	
-	public long add( JsonObject message, String url ) {
-		Log.v( TAG, "#add " );
+	public long add( JSONObject message, String url ) {
 		
 		long rowId = -1;
 		
@@ -43,7 +43,6 @@ public class QueueManager {
 			
 			ContentValues values = new ContentValues();
 			values.put( DBHelper.COL_MESSAGE, message.toString() );
-			values.put( DBHelper.COL_TYPE, "application/json" );
 			values.put( DBHelper.COL_URL, url );
 			rowId = db.insert( DBHelper.TABLE_QUEUE, null, values );
 			
@@ -65,7 +64,7 @@ public class QueueManager {
 		return rowId;
 	}
 
-	public boolean clear( JsonObject returnObj ) {
+	public boolean clear( JSONObject returnObj ) {
 		DBHelper dbHelper = new DBHelper(mContext);
 		SQLiteDatabase db = dbHelper.getWritableDatabase();
 		boolean isSuccessful = false;
@@ -78,7 +77,12 @@ public class QueueManager {
 			isSuccessful = true;
 		} catch ( Exception e ) {
 			e.printStackTrace();
-			returnObj.addProperty( Constants.KEY_MESSAGE, e.getMessage() );
+			try {
+				returnObj.put( Constants.KEY_MESSAGE, e.getMessage() );
+			} catch (JSONException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			isSuccessful = false;
 		} finally {
 			dbHelper.close();
@@ -143,7 +147,7 @@ public class QueueManager {
 			while( cur.moveToNext() ) {
 				long id = cur.getLong( cur.getColumnIndex(DBHelper.COL_ID) );
 				byte[] blob = cur.getBlob( cur.getColumnIndex(DBHelper.COL_MESSAGE) );
-				JsonObject data = (JsonObject) new JsonParser().parse(new String(blob));
+				JSONObject data = new JSONObject( new String(blob) );
 				String type = cur.getString( cur.getColumnIndex(DBHelper.COL_TYPE) );
 				String url = cur.getString( cur.getColumnIndex(DBHelper.COL_URL) );
 				
